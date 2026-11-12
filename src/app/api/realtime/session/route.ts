@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
 
 export async function POST() {
+  if (!process.env.OPENAI_API_KEY) {
+    return NextResponse.json(
+      { error: "OPENAI_API_KEY is not configured" },
+      { status: 503 }
+    );
+  }
+
   const res = await fetch("https://api.openai.com/v1/realtime/sessions", {
     method: "POST",
     headers: {
