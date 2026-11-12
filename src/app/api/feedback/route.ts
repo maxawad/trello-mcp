@@ -5,9 +5,18 @@ import { join } from "path";
 const FEEDBACK_DIR = join(process.cwd(), "feedback");
 
 export async function POST(req: Request) {
-  const { title, body, category } = await req.json();
-  if (!title || !body) {
+  let payload;
+  try {
+    payload = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
+  const { title, body, category } = payload ?? {};
+  if (typeof title !== "string" || typeof body !== "string" || !title || !body) {
     return NextResponse.json({ error: "title and body required" }, { status: 400 });
+  }
+  if (title.length > 200 || body.length > 5000) {
+    return NextResponse.json({ error: "title or body too long" }, { status: 413 });
   }
 
   await mkdir(FEEDBACK_DIR, { recursive: true });
@@ -23,7 +32,7 @@ export async function POST(req: Request) {
   const content = [
     `# ${title}`,
     "",
-    `**Category:** ${category || "other"}`,
+    `**Category:** ${typeof category === "string" ? category.slice(0, 50) : "other"}`,
     `**Date:** ${new Date().toISOString()}`,
     "",
     body,
