@@ -47,9 +47,9 @@ For a production build run `npm run build` and then `npm start`.
 
 This is not a static site. It needs a server and a database, so it cannot be hosted as plain static files. The easiest way to host it is to import the repository on Vercel and set the two environment variables above.
 
-## Important note before deploying publicly
+## Deployment note
 
-The API routes have no login or access control. Anyone who can reach a deployment can read and change all projects and tasks, and the voice session endpoint uses your OpenAI key. Keep deployments private (for example behind Vercel deployment protection) or add authentication before sharing a public URL.
+This is a personal tool and has no user accounts. If you host it, keep the deployment private (for example with Vercel deployment protection) or add your own authentication first.
 
 ## Status
 
